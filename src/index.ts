@@ -8,23 +8,14 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 import { RedisClient } from "redis";
 
-import { RegisterResolver } from "./modules/user/Register";
 import { redis } from "./redis";
-import { LoginResolver } from "./modules/user/Login";
-import { MeResolver } from "./modules/user/Me";
-import { ConfirmRegisterResolver } from "./modules/user/ConfirmRegister";
 
 const main = async () => {
   // Create connection
   await createConnection(); // will read from the orm config and use these setting to make database connection
 
   const schema = await buildSchema({
-    resolvers: [
-      MeResolver,
-      RegisterResolver,
-      LoginResolver,
-      ConfirmRegisterResolver
-    ],
+    resolvers: [__dirname + "/modules/**/*.ts"],
     authChecker: ({ context: { req } }) => {
       return !!req.session.userId;
     }
