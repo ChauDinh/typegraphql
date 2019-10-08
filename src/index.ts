@@ -18,7 +18,10 @@ const main = async () => {
   await createConnection(); // will read from the orm config and use these setting to make database connection
 
   const schema = await buildSchema({
-    resolvers: [MeResolver, RegisterResolver, LoginResolver]
+    resolvers: [MeResolver, RegisterResolver, LoginResolver],
+    authChecker: ({ context: { req } }) => {
+      return !!req.session.userId;
+    }
   });
   const apolloServer = new ApolloServer({
     schema,
