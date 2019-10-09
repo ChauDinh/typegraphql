@@ -1,14 +1,16 @@
 import { Connection } from "typeorm";
+import faker from "faker";
 
 import { testConnection } from "../../test/testConnection";
 import { gCall } from "../../test/gCall";
+import { User } from "../../entity/User";
 
 let conn: Connection;
 beforeAll(async () => {
   conn = await testConnection();
 });
 
-afterAll(() => {
+afterAll(async () => {
   conn.close();
 });
 
@@ -26,18 +28,34 @@ const registerMutation = `
 
 describe("Test for the Register resolver", () => {
   it("Create user", async () => {
-    console.log(
-      await gCall({
-        source: registerMutation,
-        variableValues: {
-          data: {
-            firstName: "tran",
-            lastName: "dan",
-            email: "tientrivutru@gmail.com",
-            password: "Katetsui1995"
-          }
+    const userTest = {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: "gakjfFD238"
+    };
+
+    const response = await gCall({
+      source: registerMutation,
+      variableValues: {
+        data: userTest
+      }
+    });
+
+    expect(response).toMatchObject({
+      data: {
+        register: {
+          firstName: userTest.firstName,
+          lastName: userTest.lastName,
+          email: userTest.email
         }
-      })
-    );
+      }
+    });
+
+    const dbAccout = await User.findOne({ where: { email: userTest.email } }); // execute the account from mock db
+    expect(dbAccout).toBeDefined();
+    expect(dbAccout!.confirmed).toBeFalsy();
+    expect(dbAccout!.firstName).toBe(userTest.firstName);
+    expect(dbAccout!.lastName).toBe(userTest.lastName);
   });
 });
