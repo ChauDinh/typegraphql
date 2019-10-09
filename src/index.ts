@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import { ApolloServer } from "apollo-server-express";
 import Express from "express";
-import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import session from "express-session";
 import connectRedis from "connect-redis";
@@ -9,17 +8,13 @@ import cors from "cors";
 import { RedisClient } from "redis";
 
 import { redis } from "./redis";
+import { createSchema } from "./utils/createSchema";
 
 const main = async () => {
   // Create connection
   await createConnection(); // will read from the orm config and use these setting to make database connection
 
-  const schema = await buildSchema({
-    resolvers: [__dirname + "/modules/**/*.ts"],
-    authChecker: ({ context: { req } }) => {
-      return !!req.session.userId;
-    }
-  });
+  const schema = await createSchema();
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }: any) => ({ req, res })
