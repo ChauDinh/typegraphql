@@ -14,9 +14,9 @@ afterAll(async () => {
   await conn.close();
 });
 
-const registerMutation = `
-  mutation Register($data: RegisterInput!) {
-    register(data: $data) {
+const meQuery = `
+  {
+    me {
       id
       firstName
       lastName
@@ -26,34 +26,39 @@ const registerMutation = `
   }
 `;
 
-describe("Test for the Register resolver", () => {
-  it("Create user", async () => {
-    const userTest = {
+describe("Test for the Me query", () => {
+  it("get user information", async () => {
+    const userTest = await User.create({
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: "gakjfFD238"
-    };
+      password: "ghjkD83"
+    }).save();
 
     const response = await gCall({
-      source: registerMutation,
-      variableValues: {
-        data: userTest
-      }
+      source: meQuery,
+      userId: userTest.id
     });
-
     expect(response).toMatchObject({
       data: {
-        register: {
+        me: {
           firstName: userTest.firstName,
           lastName: userTest.lastName,
-          email: userTest.email
+          email: userTest.email,
+          id: `${userTest.id}`
         }
       }
     });
+  });
 
-    const dbAccout = await User.findOne({ where: { email: userTest.email } }); // execute the account from mock db
-    expect(dbAccout).toBeDefined();
-    expect(dbAccout!.confirmed).toBeFalsy();
+  it("return null", async () => {
+    const response = await gCall({
+      source: meQuery
+    });
+    expect(response).toMatchObject({
+      data: {
+        me: null
+      }
+    });
   });
 });
