@@ -1,12 +1,12 @@
 import { buildSchema } from "type-graphql";
 
-import { RegisterResolver } from "../modules/user/Register";
-import { LoginResolver } from "../modules/user/Login";
-import { LogoutResolver } from "../modules/user/Logout";
-import { MeResolver } from "../modules/user/Me";
-import { ForgotPasswordResolver } from "../modules/user/ForgotPassword";
-import { ConfirmRegisterResolver } from "../modules/user/ConfirmRegister";
-import { ResetPasswordResolver } from "../modules/user/ResetPassword";
+import { RegisterResolver } from "../modules/user/register/Register";
+import { LoginResolver } from "../modules/user/login/Login";
+import { LogoutResolver } from "../modules/user/login/Logout";
+import { MeResolver } from "../modules/user/me/Me";
+import { ForgotPasswordResolver } from "../modules/user/resetPassword/ForgotPassword";
+import { ConfirmRegisterResolver } from "../modules/user/register/ConfirmRegister";
+import { ResetPasswordResolver } from "../modules/user/resetPassword/ResetPassword";
 import {
   CreateUserResolver,
   CreateProductResolver

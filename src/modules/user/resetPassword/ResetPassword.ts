@@ -1,11 +1,11 @@
 import { Resolver, Mutation, Arg, Ctx } from "type-graphql";
 import bcrypt from "bcryptjs";
 
-import { User } from "../../entity/User";
-import { redis } from "../../redis";
-import { forgotPasswordPrefix } from "../../constants/redisPrefixes";
-import { ResetPasswordInput } from "./resetPassword/ResetPasswordInput";
-import { MyContext } from "../../types/MyContext";
+import { User } from "../../../entity/User";
+import { redis } from "../../../redis";
+import { forgotPasswordPrefix } from "../../../constants/redisPrefixes";
+import { ResetPasswordInput } from "./ResetPasswordInput";
+import { MyContext } from "../../../types/MyContext";
 
 @Resolver()
 export class ResetPasswordResolver {

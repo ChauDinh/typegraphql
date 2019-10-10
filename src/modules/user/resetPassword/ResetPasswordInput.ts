@@ -1,7 +1,7 @@
 import { InputType, Field } from "type-graphql";
 import { Length } from "class-validator";
 
-import { IsPasswordValid } from "../isPasswordValid";
+import { IsPasswordValid } from "../register/isPasswordValid";
 
 @InputType()
 export class ResetPasswordInput {
